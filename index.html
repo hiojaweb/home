@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HiOja — Free Learning for Manipur Students</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --saffron: #FF6B1A;
+    --gold: #F5A623;
+    --teal: #0D9488;
+    --deep: #0A1628;
+    --card: #111B2E;
+    --muted: #94A3B8;
+    --light: #E2E8F0;
+    --white: #FFFFFF;
+    --accent: #22D3EE;
+    --green: #10B981;
+    --purple: #8B5CF6;
+    --rose: #F43F5E;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--deep);
+    color: var(--light);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* NOISE TEXTURE */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,22,40,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 900;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--saffron); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-badge {
+    background: var(--saffron);
+    color: var(--white);
+    font-size: 0.75rem; font-weight: 600;
+    padding: 0.3rem 0.8rem;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-glow {
+    position: absolute;
+    width: 700px; height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,107,26,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-55%);
+    pointer-events: none;
+  }
+  .hero-glow-2 {
+    position: absolute;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(13,148,136,0.1) 0%, transparent 70%);
+    top: 60%; left: 30%; transform: translate(-50%,-50%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem; font-weight: 700;
+    color: var(--saffron);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; display: block;
+    width: 40px; height: 1px;
+    background: var(--saffron); opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+    position: relative;
+  }
+  .hero h1 .highlight {
+    color: var(--saffron);
+    position: relative;
+    display: inline-block;
+  }
+  .hero h1 .highlight::after {
+    content: '';
+    position: absolute; bottom: 0.05em; left: 0; right: 0;
+    height: 0.12em;
+    background: linear-gradient(90deg, var(--saffron), var(--gold));
+    border-radius: 2px;
+    opacity: 0.4;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.7;
+    margin: 1.5rem auto 3rem;
+    position: relative;
+  }
+  .hero-sub strong { color: var(--light); font-weight: 500; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; position: relative; }
+  .btn-primary {
+    background: var(--saffron);
+    color: var(--white);
+    border: none; cursor: pointer;
+    padding: 0.9rem 2.2rem;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(255,107,26,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(255,107,26,0.45); }
+  .btn-ghost {
+    background: rgba(255,255,255,0.06);
+    color: var(--light);
+    border: 1px solid rgba(255,255,255,0.12);
+    cursor: pointer;
+    padding: 0.9rem 2.2rem;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem; font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex; gap: 0; flex-wrap: wrap;
+    margin: 4rem auto 0;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px; overflow: hidden;
+    max-width: 700px; width: 100%;
+    position: relative;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(10px);
+  }
+  .stat-item {
+    flex: 1; min-width: 150px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 900;
+    color: var(--saffron);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.78rem; color: var(--muted);
+    letter-spacing: 0.05em; text-transform: uppercase;
+    font-weight: 500; margin-top: 0.2rem;
+  }
+
+  /* SECTION */
+  section { position: relative; z-index: 1; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 5rem 2rem; }
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; font-weight: 700;
+    color: var(--teal);
+    letter-spacing: 0.2em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .section-desc {
+    color: var(--muted); font-size: 1.05rem;
+    line-height: 1.7; max-width: 560px;
+  }
+
+  /* CLASS GRID */
+  .classes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.2rem;
+    margin-top: 3rem;
+  }
+  .class-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .class-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--card-color, rgba(255,107,26,0.12)), transparent);
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .class-card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.18); }
+  .class-card:hover::before { opacity: 1; }
+  .class-card:hover .class-arrow { opacity: 1; transform: translateX(0); }
+  .class-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem; font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .class-emoji { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+  .class-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--white); line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .class-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .class-arrow {
+    position: absolute; bottom: 1.5rem; right: 1.5rem;
+    width: 32px; height: 32px;
+    background: var(--saffron);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: translateX(-8px);
+    transition: opacity 0.25s, transform 0.25s;
+    font-size: 0.8rem;
+  }
+  .class-tag {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem; font-weight: 600;
+    margin-top: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* SUBJECTS FEATURE */
+  .subjects-section { background: rgba(255,255,255,0.02); }
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+    margin-top: 3rem;
+  }
+  .subject-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex; align-items: flex-start; gap: 1rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .subject-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.15); }
+  .subject-icon {
+    width: 48px; height: 48px; flex-shrink: 0;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+  }
+  .subject-info h3 { font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 0.3rem; }
+  .subject-info p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+  /* HOW IT WORKS */
+  .steps-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+  .step { text-align: center; }
+  .step-num {
+    width: 56px; height: 56px;
+    border: 2px solid var(--saffron);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--saffron);
+  }
+  .step h3 { font-size: 1.05rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+  .step p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  /* BANNER */
+  .free-banner {
+    margin: 0 2rem;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #1a0a00, #0f2d28);
+    border: 1px solid rgba(255,107,26,0.2);
+    padding: 4rem 3rem;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .free-banner::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,107,26,0.15) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+  }
+  .free-banner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900; color: var(--white);
+    position: relative; margin-bottom: 1rem;
+  }
+  .free-banner p { color: var(--muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto 2rem; position: relative; line-height: 1.7; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 3rem 3rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1.5rem;
+    margin-top: 4rem;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem; font-weight: 900;
+    color: var(--white); text-decoration: none;
+  }
+  .footer-logo span { color: var(--saffron); }
+  .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { color: var(--muted); font-size: 0.78rem; width: 100%; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; margin-top: 0.5rem; }
+
+  /* SCROLL ANIMATION */
+  .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }
+    .free-banner { margin: 0 1rem; padding: 2.5rem 1.5rem; }
+    footer { padding: 2rem 1.2rem; flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Hi<span>Oja</span></a>
+  <div class="nav-links">
+    <a href="#classes">Classes</a>
+    <a href="#subjects">Subjects</a>
+    <a href="#about">About</a>
+    <span class="nav-badge">🆓 Always Free</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="hero-eyebrow">Manipur's Free Learning Platform</div>
+
+  <h1>Learn Without<br><span class="highlight">Limits.</span></h1>
+
+  <p class="hero-sub">
+    Quality education for every student in Manipur — <strong>Class 1 to 10.</strong>
+    No signup. No fees. No barriers. Just pure learning, always free.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#classes" class="btn-primary">Explore Classes →</a>
+    <a href="#about" class="btn-ghost">How it works</a>
+  </div>
+
+  <div class="stats-bar fade-in">
+    <div class="stat-item">
+      <span class="stat-num">10</span>
+      <div class="stat-label">Classes</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">8+</span>
+      <div class="stat-label">Subjects</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">100%</span>
+      <div class="stat-label">Free Forever</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">∞</span>
+      <div class="stat-label">Students</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLASSES -->
+<section id="classes">
+  <div class="section-inner">
+    <div class="fade-in">
+      <div class="section-label">Choose Your Class</div>
+      <h2 class="section-title">Find Your Grade,<br>Start Learning</h2>
+      <p class="section-desc">Every class has its own dedicated page with textbooks, notes, practice questions, and more — all organized for you.</p>
+    </div>
+    <div class="classes-grid">
+      <!-- Class 1 -->
+      <a href="class1.html" class="class-card fade-in" style="--card-color: rgba(255,107,26,0.12)">
+        <div class="class-num">Grade 01</div>
+        <span class="class-emoji">🌱</span>
+        <div class="class-name">Class I</div>
+        <div class="class-desc">Alphabets, numbers, shapes & first steps in learning</div>
+        <span class="class-tag" style="background:rgba(255,107,26,0.15);color:#FF6B1A;">Beginner</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 2 -->
+      <a href="class2.html" class="class-card fade-in" style="--card-color: rgba(245,166,35,0.12)">
+        <div class="class-num">Grade 02</div>
+        <span class="class-emoji">📖</span>
+        <div class="class-name">Class II</div>
+        <div class="class-desc">Reading, writing, basic math and environmental studies</div>
+        <span class="class-tag" style="background:rgba(245,166,35,0.15);color:#F5A623;">Beginner</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 3 -->
+      <a href="class3.html" class="class-card fade-in" style="--card-color: rgba(16,185,129,0.12)">
+        <div class="class-num">Grade 03</div>
+        <span class="class-emoji">🔢</span>
+        <div class="class-name">Class III</div>
+        <div class="class-desc">Tables, sentences, basic science and general knowledge</div>
+        <span class="class-tag" style="background:rgba(16,185,129,0.15);color:#10B981;">Primary</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 4 -->
+      <a href="class4.html" class="class-card fade-in" style="--card-color: rgba(34,211,238,0.12)">
+        <div class="class-num">Grade 04</div>
+        <span class="class-emoji">🌍</span>
+        <div class="class-name">Class IV</div>
+        <div class="class-desc">Grammar, fractions, social studies and EVS</div>
+        <span class="class-tag" style="background:rgba(34,211,238,0.15);color:#22D3EE;">Primary</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 5 -->
+      <a href="class5.html" class="class-card fade-in" style="--card-color: rgba(139,92,246,0.12)">
+        <div class="class-num">Grade 05</div>
+        <span class="class-emoji">🧪</span>
+        <div class="class-name">Class V</div>
+        <div class="class-desc">Maths, English, Hindi, Science & Social Studies</div>
+        <span class="class-tag" style="background:rgba(139,92,246,0.15);color:#8B5CF6;">Primary</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 6 -->
+      <a href="class6.html" class="class-card fade-in" style="--card-color: rgba(244,63,94,0.12)">
+        <div class="class-num">Grade 06</div>
+        <span class="class-emoji">📐</span>
+        <div class="class-name">Class VI</div>
+        <div class="class-desc">Algebra, geography, biology basics and literature</div>
+        <span class="class-tag" style="background:rgba(244,63,94,0.15);color:#F43F5E;">Middle</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 7 -->
+      <a href="class7.html" class="class-card fade-in" style="--card-color: rgba(255,107,26,0.12)">
+        <div class="class-num">Grade 07</div>
+        <span class="class-emoji">⚗️</span>
+        <div class="class-name">Class VII</div>
+        <div class="class-desc">Physics concepts, history, geometry and prose</div>
+        <span class="class-tag" style="background:rgba(255,107,26,0.15);color:#FF6B1A;">Middle</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 8 -->
+      <a href="class8.html" class="class-card fade-in" style="--card-color: rgba(13,148,136,0.12)">
+        <div class="class-num">Grade 08</div>
+        <span class="class-emoji">🧬</span>
+        <div class="class-name">Class VIII</div>
+        <div class="class-desc">Civics, polynomials, light & sound and comprehension</div>
+        <span class="class-tag" style="background:rgba(13,148,136,0.15);color:#0D9488;">Middle</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 9 -->
+      <a href="class9.html" class="class-card fade-in" style="--card-color: rgba(245,166,35,0.12)">
+        <div class="class-num">Grade 09</div>
+        <span class="class-emoji">📊</span>
+        <div class="class-name">Class IX</div>
+        <div class="class-desc">Coordinate geometry, economics, atoms & democracy</div>
+        <span class="class-tag" style="background:rgba(245,166,35,0.15);color:#F5A623;">Secondary</span>
+        <div class="class-arrow">→</div>
+      </a>
+      <!-- Class 10 -->
+      <a href="class10.html" class="class-card fade-in" style="--card-color: rgba(255,107,26,0.18); border-color: rgba(255,107,26,0.25);">
+        <div class="class-num">Grade 10 ⭐</div>
+        <span class="class-emoji">🏆</span>
+        <div class="class-name">Class X</div>
+        <div class="class-desc">Board exam prep — full syllabus, MCQs & past papers</div>
+        <span class="class-tag" style="background:rgba(255,107,26,0.25);color:#FF6B1A;">Board Year</span>
+        <div class="class-arrow">→</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SUBJECTS -->
+<section id="subjects" class="subjects-section">
+  <div class="section-inner">
+    <div class="fade-in">
+      <div class="section-label">What We Cover</div>
+      <h2 class="section-title">All Core Subjects,<br>Fully Covered</h2>
+      <p class="section-desc">Comprehensive study materials aligned with the BSE Manipur curriculum, covering all major subjects.</p>
+    </div>
+    <div class="subjects-grid">
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(255,107,26,0.15)">📐</div>
+        <div class="subject-info">
+          <h3>Mathematics</h3>
+          <p>Concepts, worked examples, practice problems and formulae for every chapter</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(16,185,129,0.15)">🔬</div>
+        <div class="subject-info">
+          <h3>Science</h3>
+          <p>Physics, Chemistry and Biology with diagrams, explanations and Q&A</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(34,211,238,0.15)">🌍</div>
+        <div class="subject-info">
+          <h3>Social Science</h3>
+          <p>History, Geography, Civics and Economics fully explained</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(139,92,246,0.15)">📝</div>
+        <div class="subject-info">
+          <h3>English</h3>
+          <p>Grammar, prose, poetry, comprehension and essay writing</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(245,166,35,0.15)">🕉️</div>
+        <div class="subject-info">
+          <h3>Hindi</h3>
+          <p>Vyakaran, gadya, padya and lekhan kaushal for all levels</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(244,63,94,0.15)">🌿</div>
+        <div class="subject-info">
+          <h3>Meitei (Manipuri)</h3>
+          <p>Meitei Mayek, literature and language learning resources</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(13,148,136,0.15)">💻</div>
+        <div class="subject-info">
+          <h3>Computer Science</h3>
+          <p>Basic computing, programming fundamentals and digital literacy</p>
+        </div>
+      </div>
+      <div class="subject-card fade-in">
+        <div class="subject-icon" style="background:rgba(255,107,26,0.15)">🎨</div>
+        <div class="subject-info">
+          <h3>General Knowledge</h3>
+          <p>Manipur culture, India GK, current affairs and environment</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="about">
+  <div class="section-inner">
+    <div class="fade-in">
+      <div class="section-label">Simple by Design</div>
+      <h2 class="section-title">Three Steps to<br>Start Learning</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step fade-in">
+        <div class="step-num">01</div>
+        <h3>Pick Your Class</h3>
+        <p>Choose from Class 1 to Class 10. Each class has its own dedicated page with full materials.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-num">02</div>
+        <h3>Select a Subject</h3>
+        <p>Browse Maths, Science, English, Social Science, Hindi, Manipuri and more.</p>
+      </div>
+      <div class="step fade-in">
+        <div class="step-num">03</div>
+        <h3>Learn & Practice</h3>
+        <p>Read notes, study chapter summaries, solve exercises and test your knowledge — all free.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FREE BANNER -->
+<div class="free-banner fade-in">
+  <h2>Zero Fees. Zero Signup.<br>Zero Barriers.</h2>
+  <p>HiOja is built for every student in Manipur — from Imphal to Churachandpur, Senapati to Moreh. Your education is our mission.</p>
+  <a href="#classes" class="btn-primary">Start Learning Now →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" class="footer-logo">Hi<span>Oja</span></a>
+  <div class="footer-links">
+    <a href="#classes">Classes</a>
+    <a href="#subjects">Subjects</a>
+    <a href="#about">About</a>
+    <a href="class10.html">Class X Board Prep</a>
+  </div>
+  <div class="footer-copy">
+    © 2025 HiOja.top — Free Education for Manipur Students 🇮🇳 | Built with ❤️ for learners across Manipur
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(el => {
+      if (el.isIntersecting) { el.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
